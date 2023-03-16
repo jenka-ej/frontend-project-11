@@ -1,11 +1,16 @@
 {
-  "name": "frontend-project-11",
+  "name": "my-webpack-project",
   "version": "1.0.0",
   "type": "module",
-  "description": "rss reader",
+  "description": "My webpack project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode=production --node-env=production",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "watch": "webpack --watch",
+    "serve": "webpack serve"
   },
   "repository": {
     "type": "git",
@@ -21,11 +26,18 @@
   },
   "homepage": "https://github.com/jenka-ej/frontend-project-11#readme",
   "dependencies": {
+    "bootstrap": "^5.2.3",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@webpack-cli/generators": "^3.0.1",
     "eslint": "^8.36.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.27.5"
+    "eslint-plugin-import": "^2.27.5",
+    "html-webpack-plugin": "^5.5.0",
+    "webpack": "^5.76.2",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.12.0",
+    "workbox-webpack-plugin": "^6.5.4"
   }
 }
