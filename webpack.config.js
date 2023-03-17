@@ -38,14 +38,9 @@ const config = {
 };
 
 module.exports = () => {
-    if (isProduction) {
-        config.mode = 'production';
-        
-        
-        config.plugins.push(new WorkboxWebpackPlugin.GenerateSW());
-        
-    } else {
-        config.mode = 'development';
-    }
-    return config;
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
 };
