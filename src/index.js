@@ -5,19 +5,19 @@ import './styles/styles.scss';
 import * as yup from 'yup';
 import onChange from 'on-change';
 import { keyBy, has } from 'lodash';
-import i18n from 'i18n';
-import resources from './locales/index';
+// import i18n from 'i18n';
+// import resources from './locales/index';
 
-const language = 'ru';
+// const language = 'ru';
 
-const i18nInstance = i18n.createInstance();
+// const i18nInstance = i18n.createInstance();
 
-const gettingInstance = i18nInstance
+/* const gettingInstance = i18nInstance
   .init({
     lng: language,
     debug: false,
     resources,
-  });
+  }); */
 
 const state = {
   link: '',
@@ -40,6 +40,7 @@ const validate = (fields) => {
 
 const inputText = document.querySelector('#url-input');
 const sendButton = document.querySelector('.btn-primary');
+const feedback = document.querySelector('.feedback');
 
 const render = () => {
   const validLink = !has(validate(state), 'link');
@@ -48,10 +49,26 @@ const render = () => {
     if (inputText.classList.contains('is-invalid')) {
       inputText.classList.remove('is-invalid');
     }
+    if (feedback.classList.contains('text-danger')) {
+      feedback.classList.replace('text-danger', 'text-success');
+    }
+    feedback.textContent = 'RSS успешно загружен';
     inputText.value = '';
     inputText.focus();
+  } else if (!validLink) {
+    if (feedback.classList.contains('text-success')) {
+      feedback.classList.replace('text-success', 'text-danger');
+    }
+    feedback.textContent = 'Ссылка должна быть валидным URL';
+    if (!inputText.classList.contains('is-invalid')) {
+      inputText.classList.add('is-invalid');
+    }
   } else if (!inputText.classList.contains('is-invalid')) {
     inputText.classList.add('is-invalid');
+    if (feedback.classList.contains('text-success')) {
+      feedback.classList.replace('text-success', 'text-danger');
+    }
+    feedback.textContent = 'RSS уже существует';
   }
 };
 
