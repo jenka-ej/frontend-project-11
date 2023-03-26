@@ -5,6 +5,19 @@ import './styles/styles.scss';
 import * as yup from 'yup';
 import onChange from 'on-change';
 import { keyBy, has } from 'lodash';
+import i18n from 'i18n';
+import resources from './locales/index';
+
+const language = 'ru';
+
+const i18nInstance = i18n.createInstance();
+
+const gettingInstance = i18nInstance
+  .init({
+    lng: language,
+    debug: false,
+    resources,
+  });
 
 const state = {
   link: '',
