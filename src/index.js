@@ -5,19 +5,19 @@ import './styles/styles.scss';
 import * as yup from 'yup';
 import onChange from 'on-change';
 import { keyBy, has } from 'lodash';
-// import i18n from 'i18n';
-// import resources from './locales/index';
+import i18next from 'i18next';
+import resources from './locales/index';
 
-// const language = 'ru';
+const language = 'ru';
 
-// const i18nInstance = i18n.createInstance();
+const i18nInstance = i18next.createInstance();
 
-/* const gettingInstance = i18nInstance
+const gettingInstance = i18nInstance
   .init({
     lng: language,
     debug: false,
     resources,
-  }); */
+  });
 
 const state = {
   link: '',
@@ -52,23 +52,31 @@ const render = () => {
     if (feedback.classList.contains('text-danger')) {
       feedback.classList.replace('text-danger', 'text-success');
     }
-    feedback.textContent = 'RSS успешно загружен';
+    gettingInstance.then(() => {
+      feedback.textContent = i18nInstance.t('success');
+    });
     inputText.value = '';
     inputText.focus();
-  } else if (!validLink) {
-    if (feedback.classList.contains('text-success')) {
-      feedback.classList.replace('text-success', 'text-danger');
-    }
-    feedback.textContent = 'Ссылка должна быть валидным URL';
+  } else if (validLink && validLinks.includes(state.link)) {
     if (!inputText.classList.contains('is-invalid')) {
       inputText.classList.add('is-invalid');
     }
-  } else if (!inputText.classList.contains('is-invalid')) {
-    inputText.classList.add('is-invalid');
     if (feedback.classList.contains('text-success')) {
       feedback.classList.replace('text-success', 'text-danger');
     }
-    feedback.textContent = 'RSS уже существует';
+    gettingInstance.then(() => {
+      feedback.textContent = i18nInstance.t('errors.duplicate');
+    });
+  } else if (!validLink) {
+    if (!inputText.classList.contains('is-invalid')) {
+      inputText.classList.add('is-invalid');
+    }
+    if (feedback.classList.contains('text-success')) {
+      feedback.classList.replace('text-success', 'text-danger');
+    }
+    gettingInstance.then(() => {
+      feedback.textContent = i18nInstance.t('errors.invalid');
+    });
   }
 };
 

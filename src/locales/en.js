@@ -8,5 +8,10 @@ export default {
     buttons: {
       add: 'Add',
     },
+    errors: {
+      invalid: 'The link must be a valid URL',
+      duplicate: 'RSS already exists',
+    },
+    success: 'RSS uploaded successfully',
   },
 };
