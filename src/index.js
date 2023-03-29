@@ -8,7 +8,7 @@ import onChange from 'on-change';
 import i18next from 'i18next';
 import resources from './locales/index';
 
-const language = 'ru';
+const language = 'en';
 
 const i18nInstance = i18next.createInstance();
 
@@ -29,6 +29,7 @@ const state = {
 yup.setLocale({
   mixed: {
     notOneOf: i18nInstance.t('errors.duplicate'),
+    required: i18nInstance.t('errors.empty'),
     default: i18nInstance.t('errors.invalid'),
   },
   string: {

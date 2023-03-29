@@ -11,6 +11,7 @@ export default {
     errors: {
       invalid: 'The link must be a valid URL',
       duplicate: 'RSS already exists',
+      empty: 'Field is empty',
     },
     success: 'RSS uploaded successfully',
   },
