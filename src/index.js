@@ -43,14 +43,14 @@ let schema = yup.object().shape({
 });
 
 const inputText = document.querySelector('#url-input');
-const sendButton = document.querySelector('.btn-primary');
+const sendButton = document.querySelector('[type="submit"]');
 const feedback = document.querySelector('.feedback');
 
 const render = () => {
   schema.validate(state.fields)
-    .then(() => axios.get(state.fields.link))
+    .then(() => axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(state.fields.link)}`))
     .then((response) => parser(response))
-    .catch((err) => console.log(err))
+    .catch((err) => { throw err; })
     .then(() => {
       state.validLinks.push(state.fields.link);
       if (inputText.classList.contains('is-invalid')) {

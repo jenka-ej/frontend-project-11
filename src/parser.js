@@ -2,30 +2,51 @@ import uniqueId from 'lodash/uniqueId';
 
 export default (response) => {
   const parser = new DOMParser();
-  const doc = parser.parseFromString(response.data, 'text/xml');
+  const doc = parser.parseFromString(response.data.contents, 'text/xml');
   const items = doc.querySelectorAll('item');
-  if (document.querySelector('section') === null) {
-    const section = document.createElement('section');
-    section.classList.add('container-fluid', 'container-xxl', 'p-5');
-    const div = document.createElement('div');
-    div.classList.add('row');
-    section.append(div);
-    const div1 = document.createElement('div');
-    div1.classList.add('col-md-10', 'col-lg-8', 'order-1', 'mx-auto', 'posts');
-    div.append(div1);
+  const divPosts = document.querySelector('.posts');
+  const divFeeds = document.querySelector('.feeds');
+  if (!divPosts.hasChildNodes()) {
     const div2 = document.createElement('div');
     div2.classList.add('card', 'border-0');
-    div1.append(div2);
+    divPosts.append(div2);
+    const div22 = document.createElement('div');
+    div22.classList.add('card', 'border-0');
+    divFeeds.append(div22);
     const div3 = document.createElement('div');
     div3.classList.add('card-body');
     div2.append(div3);
+    const div32 = document.createElement('div');
+    div32.classList.add('card-body');
+    div22.append(div32);
     const h2 = document.createElement('h2');
     h2.classList.add('card-title', 'h4');
     h2.textContent = 'Посты';
     div3.append(h2);
+    const h22 = document.createElement('h2');
+    h22.classList.add('card-title', 'h4');
+    h22.textContent = 'Фиды';
+    div32.append(h22);
     const ul = document.createElement('ul');
     ul.classList.add('list-group', 'border-0', 'rounded-0');
     div2.append(ul);
+    const ul2 = document.createElement('ul');
+    ul2.classList.add('list-group', 'border-0', 'rounded-0');
+    div22.append(ul2);
+    const mainTitle = doc.querySelector('channel > title').textContent;
+    const mainDescription = doc.querySelector('channel > description').textContent;
+    console.log(mainTitle, mainDescription);
+    const mainLi = document.createElement('li');
+    mainLi.classList.add('list-group-item', 'border-0', 'border-end-0');
+    ul2.append(mainLi);
+    const mainH = document.createElement('h3');
+    mainH.classList.add('h6', 'm-0');
+    mainH.textContent = mainTitle;
+    mainLi.append(mainH);
+    const mainP = document.createElement('p');
+    mainP.classList.add('m-0', 'small', 'text-black-50');
+    mainP.textContent = mainDescription;
+    mainLi.append(mainP);
     items.forEach((item) => {
       const id = uniqueId();
       const li = document.createElement('li');
@@ -51,9 +72,22 @@ export default (response) => {
       li.append(button);
       ul.append(li);
     });
-    document.body.append(section);
   } else {
+    const mainTitle = doc.querySelector('channel > title').textContent;
+    const mainDescription = doc.querySelector('channel > description').textContent;
+    const mainLi = document.createElement('li');
+    const ul2 = document.querySelector('.feeds > .card > .list-group');
     const ul = document.querySelector('.list-group');
+    mainLi.classList.add('list-group-item', 'border-0', 'border-end-0');
+    ul2.prepend(mainLi);
+    const mainH = document.createElement('h3');
+    mainH.classList.add('h6', 'm-0');
+    mainH.textContent = mainTitle;
+    mainLi.append(mainH);
+    const mainP = document.createElement('p');
+    mainP.classList.add('m-0', 'small', 'text-black-50');
+    mainP.textContent = mainDescription;
+    mainLi.append(mainP);
     items.forEach((item) => {
       const id = uniqueId();
       const li = document.createElement('li');
