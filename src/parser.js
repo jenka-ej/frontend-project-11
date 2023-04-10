@@ -6,6 +6,7 @@ export default (response) => {
   const items = doc.querySelectorAll('item');
   const divPosts = document.querySelector('.posts');
   const divFeeds = document.querySelector('.feeds');
+  const data = [];
   if (!divPosts.hasChildNodes()) {
     const div2 = document.createElement('div');
     div2.classList.add('card', 'border-0');
@@ -54,6 +55,9 @@ export default (response) => {
       const title = item.querySelector('title').textContent;
       const href = item.querySelector('link').textContent;
       const description = item.querySelector('description').textContent;
+      data.push({
+        title, href, description, id,
+      });
       const a = document.createElement('a');
       a.setAttribute('href', href);
       a.classList.add('fw-bold');
@@ -72,46 +76,50 @@ export default (response) => {
       li.append(button);
       ul.append(li);
     });
-  } else {
-    const mainTitle = doc.querySelector('channel > title').textContent;
-    const mainDescription = doc.querySelector('channel > description').textContent;
-    const mainLi = document.createElement('li');
-    const ul2 = document.querySelector('.feeds > .card > .list-group');
-    const ul = document.querySelector('.list-group');
-    mainLi.classList.add('list-group-item', 'border-0', 'border-end-0');
-    ul2.prepend(mainLi);
-    const mainH = document.createElement('h3');
-    mainH.classList.add('h6', 'm-0');
-    mainH.textContent = mainTitle;
-    mainLi.append(mainH);
-    const mainP = document.createElement('p');
-    mainP.classList.add('m-0', 'small', 'text-black-50');
-    mainP.textContent = mainDescription;
-    mainLi.append(mainP);
-    items.forEach((item) => {
-      const id = uniqueId();
-      const li = document.createElement('li');
-      li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
-      const title = item.querySelector('title').textContent;
-      const href = item.querySelector('link').textContent;
-      const description = item.querySelector('description').textContent;
-      const a = document.createElement('a');
-      a.setAttribute('href', href);
-      a.classList.add('fw-bold');
-      a.setAttribute('data-id', id);
-      a.setAttribute('target', '_blank');
-      a.setAttribute('rel', 'noopener noreferer');
-      a.textContent = title;
-      li.append(a);
-      const button = document.createElement('button');
-      button.setAttribute('type', 'button');
-      button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-      button.setAttribute('data-id', id);
-      button.setAttribute('data-bs-toggle', 'modal');
-      button.setAttribute('data-bs-target', '#modal');
-      button.textContent = 'Просмотр';
-      li.append(button);
-      ul.prepend(li);
-    });
+    return data;
   }
+  const mainTitle = doc.querySelector('channel > title').textContent;
+  const mainDescription = doc.querySelector('channel > description').textContent;
+  const mainLi = document.createElement('li');
+  const ul2 = document.querySelector('.feeds > .card > .list-group');
+  const ul = document.querySelector('.list-group');
+  mainLi.classList.add('list-group-item', 'border-0', 'border-end-0');
+  ul2.prepend(mainLi);
+  const mainH = document.createElement('h3');
+  mainH.classList.add('h6', 'm-0');
+  mainH.textContent = mainTitle;
+  mainLi.append(mainH);
+  const mainP = document.createElement('p');
+  mainP.classList.add('m-0', 'small', 'text-black-50');
+  mainP.textContent = mainDescription;
+  mainLi.append(mainP);
+  items.forEach((item) => {
+    const id = uniqueId();
+    const li = document.createElement('li');
+    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
+    const title = item.querySelector('title').textContent;
+    const href = item.querySelector('link').textContent;
+    const description = item.querySelector('description').textContent;
+    data.push({
+      title, href, description, id,
+    });
+    const a = document.createElement('a');
+    a.setAttribute('href', href);
+    a.classList.add('fw-bold');
+    a.setAttribute('data-id', id);
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferer');
+    a.textContent = title;
+    li.append(a);
+    const button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    button.setAttribute('data-id', id);
+    button.setAttribute('data-bs-toggle', 'modal');
+    button.setAttribute('data-bs-target', '#modal');
+    button.textContent = 'Просмотр';
+    li.append(button);
+    ul.prepend(li);
+  });
+  return data;
 };

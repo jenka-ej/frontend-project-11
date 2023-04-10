@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import onChange from 'on-change';
 import i18next from 'i18next';
 import resources from './locales/index';
-import parser from './parser.js';
+import parser from './parse.js';
 
 const language = 'en';
 
@@ -25,6 +25,7 @@ const state = {
     link: '',
   },
   validLinks: [],
+  content: [],
 };
 
 yup.setLocale({
@@ -49,7 +50,11 @@ const feedback = document.querySelector('.feedback');
 const render = () => {
   schema.validate(state.fields)
     .then(() => axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(state.fields.link)}`))
-    .then((response) => parser(response))
+    .then((response) => {
+      const data = parser(response);
+      state.content.push(data);
+      console.log(state.content);
+    })
     .catch((err) => { throw err; })
     .then(() => {
       state.validLinks.push(state.fields.link);
