@@ -21,6 +21,8 @@ const gettingInstance = i18nInstance
   });
 
 const state = {
+  processState: '',
+  buttonState: '',
   fields: {
     link: '',
   },
@@ -47,43 +49,71 @@ const inputText = document.querySelector('#url-input');
 const sendButton = document.querySelector('[type="submit"]');
 const feedback = document.querySelector('.feedback');
 
-const render = () => {
-  schema.validate(state.fields)
-    .then(() => axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(state.fields.link)}`))
-    .then((response) => {
-      const data = parser(response);
-      state.content.push(data);
-      console.log(state.content);
-    })
-    .catch((err) => { throw err; })
-    .then(() => {
-      state.validLinks.push(state.fields.link);
-      if (inputText.classList.contains('is-invalid')) {
-        inputText.classList.remove('is-invalid');
-      }
-      if (feedback.classList.contains('text-danger')) {
-        feedback.classList.replace('text-danger', 'text-success');
-      }
-      gettingInstance.then(() => {
-        feedback.textContent = i18nInstance.t('success');
+const render = (type) => {
+  if (type === '') {
+    return null;
+  }
+  if (type === 'filling') {
+    schema.validate(state.fields)
+      .then(() => {
+        sendButton.disabled = true;
+        if (feedback.classList.contains('text-danger')) {
+          feedback.classList.remove('text-danger');
+        }
+        if (feedback.classList.contains('text-success')) {
+          feedback.classList.remove('text-success');
+        }
+        if (feedback.classList.contains('is-invalid')) {
+          feedback.classList.remove('is-invalid');
+        }
+      })
+      .then(() => axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(state.fields.link)}`))
+      .then((response) => {
+        const data = parser(response);
+        state.content.push(data);
+      })
+      .then(() => {
+        state.validLinks.push(state.fields.link);
+        if (inputText.classList.contains('is-invalid')) {
+          inputText.classList.remove('is-invalid');
+        }
+        if (feedback.classList.contains('text-danger')) {
+          feedback.classList.replace('text-danger', 'text-success');
+        }
+        gettingInstance.then(() => {
+          feedback.textContent = i18nInstance.t('success');
+        });
+        inputText.value = '';
+        inputText.focus();
+        sendButton.removeAttribute('disabled');
+        state.processState = '';
+        console.log(state.content);
+      })
+      .catch((err) => {
+        state.processState = '';
+        if (!inputText.classList.contains('is-invalid')) {
+          inputText.classList.add('is-invalid');
+        }
+        if (feedback.classList.contains('text-success')) {
+          feedback.classList.replace('text-success', 'text-danger');
+        }
+        gettingInstance.then(() => {
+          feedback.textContent = err;
+        });
       });
-      inputText.value = '';
-      inputText.focus();
-    })
-    .catch((err) => {
-      if (!inputText.classList.contains('is-invalid')) {
-        inputText.classList.add('is-invalid');
-      }
-      if (feedback.classList.contains('text-success')) {
-        feedback.classList.replace('text-success', 'text-danger');
-      }
-      gettingInstance.then(() => {
-        feedback.textContent = err;
-      });
-    });
+  }
 };
 
-const watchedState = onChange(state.fields, render);
+const watchedState = onChange(state, (path, value) => {
+  switch (path) {
+    case 'processState':
+      render(value);
+      break;
+    default:
+      console.log('default case');
+      break;
+  }
+});
 
 sendButton.addEventListener('click', (event) => {
   event.preventDefault();
@@ -91,9 +121,6 @@ sendButton.addEventListener('click', (event) => {
   schema = yup.object().shape({
     link: yup.string().required().url().notOneOf(state.validLinks),
   });
-  if (watchedState.link === currentUrl) {
-    render();
-  } else {
-    watchedState.link = currentUrl;
-  }
+  state.fields.link = currentUrl;
+  watchedState.processState = 'filling';
 });
