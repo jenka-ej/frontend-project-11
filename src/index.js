@@ -8,6 +8,7 @@ import onChange from 'on-change';
 import i18next from 'i18next';
 import resources from './locales/index';
 import parser from './parse.js';
+import builder from './build.js';
 
 const language = 'en';
 
@@ -22,7 +23,6 @@ const gettingInstance = i18nInstance
 
 const state = {
   processState: '',
-  buttonState: '',
   fields: {
     link: '',
   },
@@ -83,6 +83,7 @@ const render = (type) => {
         gettingInstance.then(() => {
           feedback.textContent = i18nInstance.t('success');
         });
+        builder(state.content);
         inputText.value = '';
         inputText.focus();
         sendButton.removeAttribute('disabled');
