@@ -57,15 +57,8 @@ const render = (type) => {
     schema.validate(state.fields)
       .then(() => {
         sendButton.disabled = true;
-        if (feedback.classList.contains('text-danger')) {
-          feedback.classList.remove('text-danger');
-        }
-        if (feedback.classList.contains('text-success')) {
-          feedback.classList.remove('text-success');
-        }
-        if (feedback.classList.contains('is-invalid')) {
-          feedback.classList.remove('is-invalid');
-        }
+        feedback.classList.remove('text-danger', 'text-success', 'is-invalid');
+        feedback.textContent = '';
       })
       .then(() => axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(state.fields.link)}`))
       .then((response) => {
@@ -77,9 +70,10 @@ const render = (type) => {
         if (inputText.classList.contains('is-invalid')) {
           inputText.classList.remove('is-invalid');
         }
-        if (feedback.classList.contains('text-danger')) {
+        /* if (feedback.classList.contains('text-danger')) {
           feedback.classList.replace('text-danger', 'text-success');
-        }
+        } */
+        feedback.classList.add('text-success');
         gettingInstance.then(() => {
           feedback.textContent = i18nInstance.t('success');
         });
@@ -95,9 +89,10 @@ const render = (type) => {
         if (!inputText.classList.contains('is-invalid')) {
           inputText.classList.add('is-invalid');
         }
-        if (feedback.classList.contains('text-success')) {
+        /* if (feedback.classList.contains('text-success')) {
           feedback.classList.replace('text-success', 'text-danger');
-        }
+        } */
+        feedback.classList.add('text-danger');
         gettingInstance.then(() => {
           feedback.textContent = err;
         });
