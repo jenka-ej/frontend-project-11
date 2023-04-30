@@ -1,4 +1,4 @@
-export default (response) => {
+export default (response, i18n) => {
   const items = response;
   const ul = document.querySelector('.list-group');
   items.map((item) => {
@@ -26,7 +26,8 @@ export default (response) => {
     button.setAttribute('data-id', id);
     button.setAttribute('data-bs-toggle', 'modal');
     button.setAttribute('data-bs-target', '#modal');
-    button.textContent = 'Просмотр';
+    // button.textContent = 'Просмотр';
+    button.textContent = i18n('buttons.watch');
     button.addEventListener('click', (e) => {
       e.preventDefault();
       a.classList.remove('fw-bold');

@@ -76,7 +76,7 @@ const render = (type) => {
         gettingInstance.then(() => {
           feedback.textContent = i18nInstance.t('success');
         });
-        builder(state.content);
+        builder(state.content, i18nInstance.t);
         inputText.value = '';
         inputText.focus();
         sendButton.removeAttribute('disabled');
@@ -107,7 +107,7 @@ const render = (type) => {
           const data = parser(response);
           const difference = diff(data, state.content);
           if (difference.length !== 0) {
-            builderUpd(difference);
+            builderUpd(difference, i18nInstance.t);
             const mainContent = state.content.filter((item) => item.mainTitle === data.mainTitle);
             difference.map((post) => mainContent[0].posts.push(post));
           }

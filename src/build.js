@@ -1,4 +1,4 @@
-export default (response) => {
+export default (response, i18n) => {
   const data = response[response.length - 1];
   const items = data.posts;
   const divPosts = document.querySelector('.posts');
@@ -18,11 +18,13 @@ export default (response) => {
     div22.append(div32);
     const h2 = document.createElement('h2');
     h2.classList.add('card-title', 'h4');
-    h2.textContent = 'Посты';
+    // h2.textContent = 'Посты';
+    h2.textContent = i18n('posts');
     div3.append(h2);
     const h22 = document.createElement('h2');
     h22.classList.add('card-title', 'h4');
-    h22.textContent = 'Фиды';
+    // h22.textContent = 'Фиды';
+    h22.textContent = i18n('feeds');
     div32.append(h22);
     const ul = document.createElement('ul');
     ul.classList.add('list-group', 'border-0', 'rounded-0');
@@ -68,7 +70,8 @@ export default (response) => {
       button.setAttribute('data-id', id);
       button.setAttribute('data-bs-toggle', 'modal');
       button.setAttribute('data-bs-target', '#modal');
-      button.textContent = 'Просмотр';
+      // button.textContent = 'Просмотр';
+      button.textContent = i18n('buttons.watch');
       button.addEventListener('click', (e) => {
         e.preventDefault();
         a.classList.remove('fw-bold');
@@ -122,7 +125,8 @@ export default (response) => {
       button.setAttribute('data-id', id);
       button.setAttribute('data-bs-toggle', 'modal');
       button.setAttribute('data-bs-target', '#modal');
-      button.textContent = 'Просмотр';
+      // button.textContent = 'Просмотр';
+      button.textContent = i18n('buttons.watch');
       button.addEventListener('click', (e) => {
         e.preventDefault();
         a.classList.remove('fw-bold');
