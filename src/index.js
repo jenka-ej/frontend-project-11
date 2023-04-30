@@ -9,8 +9,10 @@ import i18next from 'i18next';
 import resources from './locales/index';
 import parser from './parse.js';
 import builder from './build.js';
+import diff from './buildUpd.js';
+import builderUpd from './buildUpdHtml.js';
 
-const language = 'en';
+const language = 'ru';
 
 const i18nInstance = i18next.createInstance();
 
@@ -70,9 +72,6 @@ const render = (type) => {
         if (inputText.classList.contains('is-invalid')) {
           inputText.classList.remove('is-invalid');
         }
-        /* if (feedback.classList.contains('text-danger')) {
-          feedback.classList.replace('text-danger', 'text-success');
-        } */
         feedback.classList.add('text-success');
         gettingInstance.then(() => {
           feedback.textContent = i18nInstance.t('success');
@@ -82,22 +81,53 @@ const render = (type) => {
         inputText.focus();
         sendButton.removeAttribute('disabled');
         state.processState = '';
-        console.log(state.content);
       })
       .catch((err) => {
         state.processState = '';
         if (!inputText.classList.contains('is-invalid')) {
           inputText.classList.add('is-invalid');
         }
-        /* if (feedback.classList.contains('text-success')) {
-          feedback.classList.replace('text-success', 'text-danger');
-        } */
         feedback.classList.add('text-danger');
         gettingInstance.then(() => {
-          feedback.textContent = err;
+          const temp = `${err}`;
+          if (temp.includes('ValidationError: ')) {
+            feedback.textContent = temp.split('ValidationError: ')[1];
+          } else {
+            feedback.textContent = temp;
+          }
         });
       });
   }
+  if (type === 'update') {
+    console.log('update here');
+    state.validLinks.map((link) => {
+      axios
+        .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
+        .then((response) => {
+          const data = parser(response);
+          const difference = diff(data, state.content);
+          if (difference.length !== 0) {
+            builderUpd(difference);
+            const mainContent = state.content.filter((item) => item.mainTitle === data.mainTitle);
+            difference.map((post) => mainContent[0].posts.push(post));
+          }
+          state.processState = '';
+        })
+        .catch((err) => {
+          state.processState = '';
+          if (!inputText.classList.contains('is-invalid')) {
+            inputText.classList.add('is-invalid');
+          }
+          feedback.classList.add('text-danger');
+          gettingInstance.then(() => {
+            feedback.textContent = err;
+          });
+        });
+      state.processState = '';
+      return null;
+    });
+  }
+  return null;
 };
 
 const watchedState = onChange(state, (path, value) => {
@@ -106,7 +136,6 @@ const watchedState = onChange(state, (path, value) => {
       render(value);
       break;
     default:
-      console.log('default case');
       break;
   }
 });
@@ -120,3 +149,12 @@ sendButton.addEventListener('click', (event) => {
   state.fields.link = currentUrl;
   watchedState.processState = 'filling';
 });
+
+const updater = () => {
+  setTimeout(() => {
+    watchedState.processState = 'update';
+    updater();
+  }, 5000);
+};
+
+updater();
