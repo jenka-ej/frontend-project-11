@@ -65,6 +65,9 @@ const render = (type) => {
       .then(() => axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(state.fields.link)}`))
       .then((response) => {
         const data = parser(response);
+        if (data === null) {
+          throw i18nInstance.t('errors.invalidRss');
+        }
         state.content.push(data);
       })
       .then(() => {
@@ -83,6 +86,7 @@ const render = (type) => {
         state.processState = '';
       })
       .catch((err) => {
+        sendButton.removeAttribute('disabled');
         state.processState = '';
         if (!inputText.classList.contains('is-invalid')) {
           inputText.classList.add('is-invalid');
@@ -99,7 +103,6 @@ const render = (type) => {
       });
   }
   if (type === 'update') {
-    console.log('update here');
     state.validLinks.map((link) => {
       axios
         .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
@@ -113,14 +116,14 @@ const render = (type) => {
           }
           state.processState = '';
         })
-        .catch((err) => {
+        .catch(() => {
           state.processState = '';
           if (!inputText.classList.contains('is-invalid')) {
             inputText.classList.add('is-invalid');
           }
           feedback.classList.add('text-danger');
           gettingInstance.then(() => {
-            feedback.textContent = err;
+            feedback.textContent = i18nInstance.t('errors.axiosError');
           });
         });
       state.processState = '';
