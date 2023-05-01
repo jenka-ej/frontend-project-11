@@ -6,6 +6,7 @@ import './styles/styles.scss';
 import * as yup from 'yup';
 import onChange from 'on-change';
 import i18next from 'i18next';
+import { AxiosError } from 'axios';
 import resources from './locales/index';
 import parser from './parse.js';
 import builder from './build.js';
@@ -94,7 +95,9 @@ const render = (type) => {
         feedback.classList.add('text-danger');
         gettingInstance.then(() => {
           const temp = `${err}`;
-          if (temp.includes('ValidationError: ')) {
+          if (err instanceof AxiosError) {
+            feedback.textContent = i18nInstance.t('errors.axiosError');
+          } else if (temp.includes('ValidationError: ')) {
             feedback.textContent = temp.split('ValidationError: ')[1];
           } else {
             feedback.textContent = temp;
