@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import * as bootstrap from 'bootstrap'; // eslint-disable-line no-unused-vars
 import './styles/styles.scss';
 import * as yup from 'yup';
 import onChange from 'on-change';
 import i18next from 'i18next';
-import { AxiosError } from 'axios';
 import resources from './locales/index';
 import parser from './parse.js';
 import builder from './build.js';
@@ -98,7 +97,8 @@ const render = (type) => {
           if (err instanceof AxiosError) {
             feedback.textContent = i18nInstance.t('errors.axiosError');
           } else if (temp.includes('ValidationError: ')) {
-            feedback.textContent = temp.split('ValidationError: ')[1];
+            const [, result] = temp.split('ValidationError: ');
+            feedback.textContent = result;
           } else {
             feedback.textContent = temp;
           }
