@@ -1,9 +1,9 @@
 export default {
   translation: {
-    languages: {
+    /* languages: {
       en: 'English',
       ru: 'Русский',
-    },
+    }, */
     header: 'RSS Reader',
     feeds: 'Feeds',
     posts: 'Posts',
