@@ -52,9 +52,6 @@ const sendButton = document.querySelector('[type="submit"]');
 const feedback = document.querySelector('.feedback');
 
 const render = (type) => {
-  if (type === '') {
-    return null;
-  }
   if (type === 'filling') {
     schema.validate(state.fields)
       .then(() => {
@@ -106,32 +103,25 @@ const render = (type) => {
       });
   }
   if (type === 'update') {
-    state.validLinks.map((link) => {
-      axios
-        .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
-        .then((response) => {
-          const data = parser(response);
-          const difference = diff(data, state.content);
-          if (difference.length !== 0) {
-            builderUpd(difference, i18nInstance.t);
-            const mainContent = state.content.filter((item) => item.mainTitle === data.mainTitle);
-            difference.map((post) => mainContent[0].posts.push(post));
-          }
-          state.processState = '';
-        })
-        .catch(() => {
-          state.processState = '';
-          if (!inputText.classList.contains('is-invalid')) {
-            inputText.classList.add('is-invalid');
-          }
-          feedback.classList.add('text-danger');
-          gettingInstance.then(() => {
-            feedback.textContent = i18nInstance.t('errors.axiosError');
-          });
-        });
-      state.processState = '';
-      return null;
-    });
+    console.log('update');
+    state.processState = '';
+    if (state.validLinks.length !== 0) {
+      state.validLinks.map((link) => {
+        axios
+          .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
+          .then((response) => {
+            const data = parser(response);
+            const difference = diff(data, state.content);
+            if (difference.length !== 0) {
+              builderUpd(difference, i18nInstance.t);
+              const mainContent = state.content.filter((item) => item.mainTitle === data.mainTitle);
+              difference.map((post) => mainContent[0].posts.push(post));
+            }
+          })
+          .catch(() => {});
+        return null;
+      });
+    }
   }
   return null;
 };

@@ -18,12 +18,10 @@ export default (response, i18n) => {
     div22.append(div32);
     const h2 = document.createElement('h2');
     h2.classList.add('card-title', 'h4');
-    // h2.textContent = 'Посты';
     h2.textContent = i18n('posts');
     div3.append(h2);
     const h22 = document.createElement('h2');
     h22.classList.add('card-title', 'h4');
-    // h22.textContent = 'Фиды';
     h22.textContent = i18n('feeds');
     div32.append(h22);
     const ul = document.createElement('ul');
@@ -45,51 +43,11 @@ export default (response, i18n) => {
     mainP.classList.add('m-0', 'small', 'text-black-50');
     mainP.textContent = mainDescription;
     mainLi.append(mainP);
-    items.map((item) => {
-      const li = document.createElement('li');
-      li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
-      const { title } = item;
-      const { href } = item;
-      const { description } = item;
-      const { id } = item;
-      const a = document.createElement('a');
-      a.setAttribute('href', href);
-      a.classList.add('fw-bold');
-      a.setAttribute('data-id', id);
-      a.setAttribute('target', '_blank');
-      a.setAttribute('rel', 'noopener noreferer');
-      a.textContent = title;
-      a.addEventListener('click', () => {
-        a.classList.remove('fw-bold');
-        a.classList.add('fw-normal', 'link-secondary');
-      });
-      li.append(a);
-      const button = document.createElement('button');
-      button.setAttribute('type', 'button');
-      button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-      button.setAttribute('data-id', id);
-      button.setAttribute('data-bs-toggle', 'modal');
-      button.setAttribute('data-bs-target', '#modal');
-      // button.textContent = 'Просмотр';
-      button.textContent = i18n('buttons.watch');
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-        a.classList.remove('fw-bold');
-        a.classList.add('fw-normal', 'link-secondary');
-        document.querySelector('.modal-header > h5').textContent = title;
-        document.querySelector('.modal-content > .modal-body').textContent = description;
-        document.querySelector('.modal-footer > a').setAttribute('href', href);
-      });
-      li.append(button);
-      ul.append(li);
-      return null;
-    });
   } else {
     const { mainTitle } = data;
     const { mainDescription } = data;
     const mainLi = document.createElement('li');
     const ul2 = document.querySelector('.feeds > .card > .list-group');
-    const ul = document.querySelector('.list-group');
     mainLi.classList.add('list-group-item', 'border-0', 'border-end-0');
     ul2.prepend(mainLi);
     const mainH = document.createElement('h3');
@@ -100,44 +58,44 @@ export default (response, i18n) => {
     mainP.classList.add('m-0', 'small', 'text-black-50');
     mainP.textContent = mainDescription;
     mainLi.append(mainP);
-    items.map((item) => {
-      const li = document.createElement('li');
-      li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
-      const { title } = item;
-      const { href } = item;
-      const { description } = item;
-      const { id } = item;
-      const a = document.createElement('a');
-      a.setAttribute('href', href);
-      a.classList.add('fw-bold');
-      a.setAttribute('data-id', id);
-      a.setAttribute('target', '_blank');
-      a.setAttribute('rel', 'noopener noreferer');
-      a.textContent = title;
-      a.addEventListener('click', () => {
-        a.classList.remove('fw-bold');
-        a.classList.add('fw-normal', 'link-secondary');
-      });
-      li.append(a);
-      const button = document.createElement('button');
-      button.setAttribute('type', 'button');
-      button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-      button.setAttribute('data-id', id);
-      button.setAttribute('data-bs-toggle', 'modal');
-      button.setAttribute('data-bs-target', '#modal');
-      // button.textContent = 'Просмотр';
-      button.textContent = i18n('buttons.watch');
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-        a.classList.remove('fw-bold');
-        a.classList.add('fw-normal', 'link-secondary');
-        document.querySelector('.modal-header > h5').textContent = title;
-        document.querySelector('.modal-content > .modal-body').textContent = description;
-        document.querySelector('.modal-footer > a').setAttribute('href', href);
-      });
-      li.append(button);
-      ul.prepend(li);
-      return null;
-    });
   }
+  const list = document.querySelector('.list-group');
+  items.map((item) => {
+    const li = document.createElement('li');
+    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
+    const { title } = item;
+    const { href } = item;
+    const { description } = item;
+    const { id } = item;
+    const a = document.createElement('a');
+    a.setAttribute('href', href);
+    a.classList.add('fw-bold');
+    a.setAttribute('data-id', id);
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferer');
+    a.textContent = title;
+    a.addEventListener('click', () => {
+      a.classList.remove('fw-bold');
+      a.classList.add('fw-normal', 'link-secondary');
+    });
+    li.append(a);
+    const button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    button.setAttribute('data-id', id);
+    button.setAttribute('data-bs-toggle', 'modal');
+    button.setAttribute('data-bs-target', '#modal');
+    button.textContent = i18n('buttons.watch');
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      a.classList.remove('fw-bold');
+      a.classList.add('fw-normal', 'link-secondary');
+      document.querySelector('.modal-header > h5').textContent = title;
+      document.querySelector('.modal-content > .modal-body').textContent = description;
+      document.querySelector('.modal-footer > a').setAttribute('href', href);
+    });
+    li.append(button);
+    list.prepend(li);
+    return null;
+  });
 };
