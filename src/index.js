@@ -42,11 +42,7 @@ yup.setLocale({
   },
 });
 
-/* let schema = yup.object().shape({
-  link: yup.string().required().url().notOneOf(state.validLinks),
-}); */
 let schema;
-
 const inputText = document.querySelector('#url-input');
 const sendButton = document.querySelector('[type="submit"]');
 const feedback = document.querySelector('.feedback');
