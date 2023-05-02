@@ -10,7 +10,6 @@ import resources from './locales/index';
 import parser from './parse.js';
 import builder from './build.js';
 import diff from './buildUpd.js';
-import builderUpd from './buildUpdHtml.js';
 
 const language = 'ru';
 
@@ -76,7 +75,7 @@ const render = (type) => {
         gettingInstance.then(() => {
           feedback.textContent = i18nInstance.t('success');
         });
-        builder(state.content, i18nInstance.t);
+        builder(state.content, i18nInstance.t, type);
         inputText.value = '';
         inputText.focus();
         sendButton.removeAttribute('disabled');
@@ -113,7 +112,7 @@ const render = (type) => {
             const data = parser(response);
             const difference = diff(data, state.content);
             if (difference.length !== 0) {
-              builderUpd(difference, i18nInstance.t);
+              builder(difference, i18nInstance.t, type);
               const mainContent = state.content.filter((item) => item.mainTitle === data.mainTitle);
               difference.map((post) => mainContent[0].posts.push(post));
             }
