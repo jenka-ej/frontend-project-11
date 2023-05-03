@@ -6,21 +6,18 @@ import './styles/styles.scss';
 import * as yup from 'yup';
 import onChange from 'on-change';
 import i18next from 'i18next';
-import resources from './locales/index';
+import ru from './locales/ru.js';
 import parser from './parse.js';
 import builder from './build.js';
 import diff from './buildUpd.js';
 
-const language = 'ru';
-
 const i18nInstance = i18next.createInstance();
-
-const gettingInstance = i18nInstance
-  .init({
-    lng: language,
-    debug: false,
-    resources,
-  });
+i18nInstance.init({
+  lng: 'ru',
+  resources: {
+    ru,
+  },
+});
 
 const state = {
   processState: '',
@@ -48,6 +45,7 @@ const sendButton = document.querySelector('[type="submit"]');
 const feedback = document.querySelector('.feedback');
 
 const render = (type) => {
+  state.processState = '';
   if (type === 'filling') {
     schema.validate(state.fields)
       .then(() => {
@@ -69,38 +67,30 @@ const render = (type) => {
           inputText.classList.remove('is-invalid');
         }
         feedback.classList.add('text-success');
-        gettingInstance.then(() => {
-          feedback.textContent = i18nInstance.t('success');
-        });
+        feedback.textContent = i18nInstance.t('success');
         builder(state.content, i18nInstance.t, type);
         inputText.value = '';
         inputText.focus();
         sendButton.removeAttribute('disabled');
-        state.processState = '';
       })
       .catch((err) => {
         sendButton.removeAttribute('disabled');
-        state.processState = '';
         if (!inputText.classList.contains('is-invalid')) {
           inputText.classList.add('is-invalid');
         }
         feedback.classList.add('text-danger');
-        gettingInstance.then(() => {
-          const temp = `${err}`;
-          if (err instanceof AxiosError) {
-            feedback.textContent = i18nInstance.t('errors.axiosError');
-          } else if (temp.includes('ValidationError: ')) {
-            const [, result] = temp.split('ValidationError: ');
-            feedback.textContent = result;
-          } else {
-            feedback.textContent = temp;
-          }
-        });
+        const temp = `${err}`;
+        if (err instanceof AxiosError) {
+          feedback.textContent = i18nInstance.t('errors.axiosError');
+        } else if (temp.includes('ValidationError: ')) {
+          const [, result] = temp.split('ValidationError: ');
+          feedback.textContent = result;
+        } else {
+          feedback.textContent = temp;
+        }
       });
   }
   if (type === 'update') {
-    console.log('update');
-    state.processState = '';
     if (state.validLinks.length !== 0) {
       state.validLinks.map((link) => {
         axios
@@ -148,5 +138,4 @@ const updater = () => {
     updater();
   }, 5000);
 };
-
 updater();
