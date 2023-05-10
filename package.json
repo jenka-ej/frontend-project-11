@@ -1,23 +1,15 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
-  "description": "My webpack project",
-  "main": "index.js",
+  "description": "RSS aggregator project",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode=production --node-env=production",
-    "build:dev": "webpack --mode=development",
-    "build:prod": "webpack --mode=production --node-env=production",
-    "watch": "webpack --watch",
-    "serve": "webpack serve"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jenka-ej/frontend-project-11.git"
   },
-  "keywords": [
-    "rss"
-  ],
   "author": "Evgeniy Filippov",
   "license": "ISC",
   "bugs": {
