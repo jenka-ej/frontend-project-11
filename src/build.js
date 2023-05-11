@@ -2,7 +2,7 @@ export default (response, i18n, type) => {
   let items;
   if (type === 'filling') {
     const data = response[response.length - 1];
-    items = data.posts;
+    items = data.posts.reverse();
     const divPosts = document.querySelector('.posts');
     const divFeeds = document.querySelector('.feeds');
     if (!divPosts.hasChildNodes()) {
