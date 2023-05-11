@@ -6,7 +6,7 @@ export default (response) => {
   if (!doc.querySelector('rss')) {
     return null;
   }
-  const items = doc.querySelectorAll('item');
+  const items = doc.querySelectorAll('item').reverse();
   const mainTitle = doc.querySelector('channel > title').textContent;
   const mainDescription = doc.querySelector('channel > description').textContent;
   const data = { mainTitle, mainDescription, posts: [] };
